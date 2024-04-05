@@ -1,12 +1,10 @@
 import streamlit as st
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
-
 model_name = "gpt2"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name)
 text_generator = pipeline("text-generation", model=model, tokenizer=tokenizer, framework="pt")
-
 
 # Define enhanced Streamlit app
 def main():
@@ -18,14 +16,34 @@ def main():
         initial_sidebar_state="expanded"
     )
 
-
     st.markdown(
         """
         <style>
             .main {background-color: #f0f2f6;}
             h1 {text-align: center; color: #333;}
-            .stTextArea>div>div>textarea {background-color: #fafafa;}
-            .stButton>button {border: 2px solid #4CAF50; border-radius: 5px;}
+            /* Text area border color change on focus */
+            .stTextArea>div>div>textarea:focus {
+                border: 2px solid #4CAF50 !important;
+            }
+            .stTextArea>div>div>textarea {
+                background-color: #fafafa;
+                border-radius: 5px;
+                border: 2px solid #EFEFEF; /* default color */
+            }
+            .stButton>button {
+                border: 2px solid #4CAF50;
+                border-radius: 5px;
+                color: white;
+                background-color: #4CAF50;
+                font-size: 16px;
+                transition: background-color 0.3s, color 0.3s;
+            }
+            /* Generate button border color change on hover */
+            .stButton>button:hover {
+                border: 2px solid #4CAF50;
+                background-color: #367f47;
+                color: #4CAF50;
+            }
         </style>
         """, unsafe_allow_html=True
     )
@@ -51,7 +69,8 @@ def main():
         """, unsafe_allow_html=True
     )
 
-    # User input for text generation
+
+    # User input for text generation with the updated CSS for the textarea
     text_input = st.text_area("Enter your text here to start generating:", height=150,
                               placeholder="Type your prompt here...")
 
@@ -75,5 +94,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
