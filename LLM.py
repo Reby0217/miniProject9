@@ -44,8 +44,9 @@ def main():
     st.markdown(
         """
         <div style="padding: 20px; border-radius: 10px;">
-            <p>This app demonstrates the capabilities of a state-of-the-art language model for text generation, with a focus on creating a more engaging user interface and improved chatbot performance.</p>
-            <p>Enter a prompt in the text box below and click <span style="font-weight: bold;">Generate</span> to see the model's response. Explore different prompts to discover the model's versatility!</p>
+            <p>This app showcases the innovative capabilities of a cutting-edge language model for text generation. Leveraging a model trained on a diverse corpus, it excels in crafting detailed, context-aware responses, ranging from casual conversations to intricate narratives.</p>
+            <p>Simply type a prompt into the text box below and press <span style="font-weight: bold;">Generate</span> to unveil the model's creativity. Whether you're looking for a continuation of a story, a simulated dialogue, or an imaginative exploration based on your input, the possibilities are vast. Feel the model's flair by experimenting with various prompts and witness how it weaves narratives, conjures dialogues, or delves into topics with remarkable coherence and inventiveness.</p>
+            <p><strong>Note:</strong> The generated text may sometimes venture into unexpected territories or adopt unique narrative styles, reflecting the model's design to simulate a wide range of human-like text based on the given prompt.</p>
         </div>
         """, unsafe_allow_html=True
     )
@@ -57,9 +58,17 @@ def main():
     if st.button("Generate"):
         if text_input:
             with st.spinner('Generating...'):
-                generated_text = text_generator(text_input, max_length=100, do_sample=True)[0]['generated_text']
-            st.markdown("### Generated Text:")
-            st.write(generated_text)
+                # Generate slightly more text to ensure complete sentences
+                generated_texts = text_generator(text_input, max_length=120, do_sample=True)
+                generated_text = generated_texts[0]['generated_text']
+
+                # Trim to the last complete sentence
+                last_period_index = generated_text.rfind('. ')
+                if last_period_index != -1:
+                    generated_text = generated_text[:last_period_index + 1]
+
+                st.markdown("### Generated Text:")
+                st.write(generated_text)
         else:
             st.error("Please enter some text to generate.")
 
