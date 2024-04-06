@@ -1,11 +1,9 @@
 import streamlit as st
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+from transformers import pipeline
 
 model_name = "gpt2"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
-text_generator = pipeline("text-generation", model=model, tokenizer=tokenizer, framework="pt")
 
+text_generator = pipeline("text-generation", model=model_name, truncation=True)
 # Define enhanced Streamlit app
 def main():
     # Improved page configuration
@@ -78,7 +76,7 @@ def main():
         if text_input:
             with st.spinner('Generating...'):
                 # Generate slightly more text to ensure complete sentences
-                generated_texts = text_generator(text_input, max_length=120, do_sample=True)
+                generated_texts = text_generator(text_input, max_length=120, do_sample=True, truncation=True)
                 generated_text = generated_texts[0]['generated_text']
 
                 # Trim to the last complete sentence
